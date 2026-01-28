@@ -309,6 +309,7 @@ class Topology:
             "cpu",
             "cuda",
             "mtia",
+            "mlu",
         ], f"unsupported compute device {compute_device}"
 
         self._compute_device = compute_device

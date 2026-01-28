@@ -537,7 +537,7 @@ class BaseEmbeddingSharder(ModuleSharder[M]):
             ShardingType.COLUMN_WISE.value,
             ShardingType.TABLE_COLUMN_WISE.value,
         ]
-        if compute_device_type in {"cuda"}:
+        if compute_device_type in {"cuda", "mlu"}:
             types += [
                 ShardingType.ROW_WISE.value,
                 ShardingType.TABLE_ROW_WISE.value,
@@ -591,11 +591,12 @@ class BaseEmbeddingSharder(ModuleSharder[M]):
             assert compute_device_type in {"cuda"}
             return {ParameterStorage.DDR.value: tensor_bytes}
         else:
-            assert compute_device_type in {"cuda", "cpu", "mtia"}
+            assert compute_device_type in {"cuda", "cpu", "mtia", "mlu"}
             storage_map = {
                 "cuda": ParameterStorage.HBM,
                 "cpu": ParameterStorage.DDR,
                 "mtia": ParameterStorage.HBM,
+                "mlu": ParameterStorage.HBM,
             }
             return {
                 storage_map[compute_device_type].value: get_tensor_size_bytes(tensor)
